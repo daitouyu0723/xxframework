@@ -1,0 +1,5 @@
+1001 : database driver not found
+1002 : model class not found
+1003 : controller class not found
+1004 : library class not found
+1005 : database config not find when try to instanced db driver  

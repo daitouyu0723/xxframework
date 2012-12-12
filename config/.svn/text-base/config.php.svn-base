@@ -1,0 +1,17 @@
+//default config, don't edit this file, please set you application config in APP_PATH/config/config.php
+<?php
+return array(
+    
+    //system config
+    'debug' => true,
+    'cache' => false,
+    
+    //database config
+    'database' => 'mysql',
+    'dbhost' => 'localhost',
+    'dbuser' => 'root',
+    'dbpassword' => '',
+    'dbname' => 'test',
+    'dbport' => '3306',
+    
+    );

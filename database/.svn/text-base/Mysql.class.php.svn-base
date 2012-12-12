@@ -1,0 +1,102 @@
+<?php
+/**
+ * connect to mysql database class
+ * @package mcp
+ * @author wangwei
+ * @version 1.0 23 Apr 2012
+ * @copyright (c) 2012 chineseall.net
+ */
+
+class Mysql {
+	
+	const DBHOST = 'localhost';
+	const DBUSER = 'mcp';
+	const DBPASSWORD = 'R9*ik2Nd-3kjra&dw-';
+	const DBNAME = 'mcp_lz';
+	
+	static private $_instance;
+
+	private $_link;
+
+	public static function getInstance() {
+		if ( ! (self::$_instance instanceof self) ) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+
+	private function __construct() {
+		$this->_link = mysql_connect(self::DBHOST, self::DBUSER, self::DBPASSWORD);
+		if (!$this->_link) {
+			throw new Exception('connect database failure');
+		}
+		
+		if (! mysql_select_db(self::DBNAME, $this->_link)) {
+			throw new Exception('connect database');
+		}
+		
+		if (! mysql_query('set names utf8', $this->_link)) {
+			throw new Exception('set names utf8');
+		}
+	}
+	
+	public function select_db($dbname) {
+        return mysql_select_db($dbname, $this->_link);
+	}
+
+	public function query($sql) {
+		return mysql_query($sql, $this->_link);
+	}
+	
+	public function insert_id() {
+		return mysql_insert_id($this->_link);
+	}	
+
+	public function affected_rows() {
+		return mysql_affected_rows($this->_link);
+	}
+
+	public function fetch_array($sql) {
+		$result = mysql_query($sql,$this->_link);
+		return $result === FALSE ? FALSE : mysql_fetch_assoc($result);
+	}
+
+	public function fetch_arrays($sql) {
+		$result = mysql_query($sql,$this->_link);
+		if ($result) {
+			$array = array();
+			while($row = mysql_fetch_assoc($result)) {
+				$array[] = $row;
+			}
+			mysql_free_result($result);
+			return $array;
+		}
+		return false;
+	}
+
+	public function fetch_object($sql) {
+		$result = mysql_query($sql,$this->_link);
+		return mysql_fetch_object($result);
+	}
+
+	public function fetch_list($sql) {
+		$result = mysql_query($sql,$this->_link);
+		if ($result) {
+			$array = array();
+			while($row = mysql_fetch_object($result)) {
+				$array[] = $row;
+			}
+			mysql_free_result($result);
+			return $array;
+		}
+		return false;
+	}
+
+	public function get_errno() {
+		return mysql_errno($this->_link);
+	}
+
+	public function get_error() {
+		return mysql_error($this->_link);
+	}
+}
